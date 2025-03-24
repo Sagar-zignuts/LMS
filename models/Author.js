@@ -13,7 +13,7 @@ const CreateAutherTable = async () => {
         )`;
 
     await pg.query(query);
-    // console.log("Author table created");
+    
   } catch (error) {
     console.log(`Error in create author table : ${error}`);
   }

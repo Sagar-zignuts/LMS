@@ -13,7 +13,6 @@ const CreateUserTable  = async ()=>{
         role VARCHAR(20) default 'user'
         )`;
         await pg.query(query)
-        // console.error("User table created successfuly");
         
     } catch (error) {
         console.log(`error in create table for user : ${error}`);

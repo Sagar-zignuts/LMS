@@ -8,12 +8,6 @@ const CreateBook = async (req, res) => {
     const { title, description, author_id, publication } = req.body;
     const cover_image = req.file ? req.file.path : null;
 
-    if (!title || !author_id) {
-      return res
-        .status(400)
-        .json({ success: false, messsage: "All field required" });
-    }
-
     const query = `
         INSERT INTO books 
         (title, description , author_id , publication  , cover_image)
@@ -22,7 +16,7 @@ const CreateBook = async (req, res) => {
         RETURNING * 
         `;
 
-    const value = [title, description, author_id, publication, cover_image];
+    const value = [title, description,author_id, publication, cover_image];
     const { rows } = await pg.query(query, value);
 
     await redis.del("books:*");
@@ -53,12 +47,12 @@ const getBook = async (req,res)=>{
   const cacheKey= "books: all";
 
   try {
-    const cached = await redisClient.get(cacheKey);
+    const cached = await redis.get(cacheKey);
     if (cached) {
       return res.json({ success: true, data: JSON.parse(cached) });
     }
     const { rows } = await pg.query('SELECT * FROM books');
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(rows));
+    await redis.setEx(cacheKey, 3600, JSON.stringify(rows));
     return res.json({ success: true, data: rows });
 
   } catch (error) {
@@ -102,7 +96,7 @@ const updateBook = async (req,res)=>{
         return res.status(404).json({ success: false, message: 'Book not found' });
       }
 
-      await redisClient.del('books:*');
+      await redis.del('books:*');
       return res.json({ success: true, data: rows[0] });
   } catch (error) {
     if (error.code === '23503') {
@@ -121,7 +115,7 @@ const deleteBook = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Book not found' });
     }
 
-    await redisClient.del('books:*');
+    await redis.del('books:*');
     return res.json({ success: true, message: 'Book deleted successfully' });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error deleting book', error: error.message });

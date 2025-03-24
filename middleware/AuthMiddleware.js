@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const {body , validationResult} = require('express-validator')
+require('dotenv').config()
 
 const AuthMiddleware = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -12,9 +13,8 @@ const AuthMiddleware = (req, res, next) => {
   try {
     const decoder = jwt.verify(
       token,
-      "sfasAKfoneinr21onsCON2indnsk2n352eflknwEM"
+      process.env.JWT_SECRET_KEY
     );
-    console.log(decoder);
     req.user = decoder;
     next();
   } catch (error) {
@@ -35,7 +35,7 @@ const isAdmin = (req, res, next) => {
 
 const validateBook = [
 body('title').notEmpty().withMessage("Title is required"),
-body('author_id').notEmpty().withMessage("Author ID must be an integer"),
+body('author_id').notEmpty().isInt().withMessage("Author ID must be an integer"),
 body('publication').optional().isDate().withMessage("Publication date must be a valid date (YYYY-MM-DD)"),
 (req,res,next)=>{
   const errors = validationResult(req);

@@ -14,7 +14,7 @@ const CreateBookTable = async ()=>{
         )`;
     
         await pg.query(query)
-        // console.log("Book table created sussessfuly");
+
     } catch (error) {
         console.log(`error in create book table  :${error}`);
     }

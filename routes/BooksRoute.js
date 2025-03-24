@@ -5,12 +5,12 @@ const upload = require('../middleware/Uploads')
 
 router.use(AuthMiddleware)
 
-router.post('/' , isAdmin , validateBook,upload.single('cover_image'),CreateBook)
-router.put('/:id' , isAdmin , validateBook,upload.single('cover_image'),updateBook)
+router.post('/' , isAdmin , upload.single('cover_image'),validateBook,CreateBook)
+router.put('/:id' , isAdmin , upload.single('cover_image'),validateBook,updateBook)
 router.delete('/:id', isAdmin , deleteBook)
 
 router.get('/' , getBook)
 router.get('/:id' , getBookById)
-router.get('/serach', searchBooks)
+router.get('/search', searchBooks)
 
 module.exports = router

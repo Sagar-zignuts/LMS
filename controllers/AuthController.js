@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const SendMail = require("../util/SendMail");
 const { CreateUser, FindUser } = require("../models/User");
 const bcrypt = require("bcrypt");
+require('dotenv').config()
 
 const isValidEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -75,8 +76,8 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      "sfasAKfoneinr21onsCON2indnsk2n352eflknwEM",
-      { expiresIn: "1h" }
+      process.env.JWT_SECRET_KEY,
+      {expiresIn : '1h'}
     );
 
     return res.status(200).json({
