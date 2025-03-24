@@ -16,7 +16,6 @@ const CreateUserTable  = async ()=>{
         
     } catch (error) {
         console.log(`error in create table for user : ${error}`);
-        
     }
 }
 
