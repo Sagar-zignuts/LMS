@@ -10,7 +10,7 @@ router.put('/:id' , isAdmin , upload.single('cover_image'),validateBook,updateBo
 router.delete('/:id', isAdmin , deleteBook)
 
 router.get('/' , getBook)
-router.get('/:id' , getBookById)
 router.get('/search', searchBooks)
+router.get('/:id' , getBookById)
 
 module.exports = router

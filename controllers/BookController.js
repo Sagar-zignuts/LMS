@@ -131,14 +131,16 @@ const searchBooks = async (req, res) => {
   }
 
   try {
-    const cached = await redisClient.get(cacheKey);
+    const cached = await redis.get(cacheKey);
     if (cached) {
       return res.json({ success: true, data: JSON.parse(cached) });
     }
 
     const query = 'SELECT * FROM books WHERE title ILIKE $1';
     const { rows } = await pg.query(query, [`%${q}%`]);
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(rows));
+    
+    
+    await redis.setEx(cacheKey, 3600, JSON.stringify(rows));
     return res.json({ success: true, data: rows });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error searching books', error: error.message });

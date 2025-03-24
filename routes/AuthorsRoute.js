@@ -10,7 +10,7 @@ router.put('/:id' , isAdmin ,validateAuthor, updateAuthor)
 router.delete('/:id' , isAdmin , deleteAuthor)
 
 router.get('/' , getAuthor)
-router.get('/:id' , getAuthorById)
 router.get('/search',  searchAuthors)
+router.get('/:id' , getAuthorById)
 
 module.exports = router
